@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Language Translation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+</head>
+<body>
+    <h1>Live Language Translation</h1>
+
+    <label for="inputText">Enter Text:</label>
+    <textarea id="inputText" rows="4" placeholder="Type text to translate"></textarea>
+  
+    <button id="microphoneBtn" onmousedown="startRecording()" onmouseup="stopRecording()">
+        <i class="fas fa-microphone"></i> Press and Hold to Record
+    </button>
+
+    <label for="outputText">Translated Text:</label>
+    <textarea id="outputText" rows="4" readonly></textarea>
+
+    <button id="translateBtn" onclick="translateText()">
+        Translate <i class="fas fa-angle-double-right"></i>
+    </button>
+
+    <div class="help-container">
+        <button id="helpButton"><i class="fas fa-comment"></i></button>
+            <div id="contactForm" class="contact-form">
+                <h2>Contact Us</h2>
+                <form id="helpForm">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+    </div>
+  
+    <footer>
+        &copy; 2023 Live Language Translation App by TheOptimisticDev
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+</body>
+</html>

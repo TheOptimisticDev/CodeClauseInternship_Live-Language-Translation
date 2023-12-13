@@ -1,0 +1,132 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-image: url('images/AI\ Language\ Translator.avif'); 
+    background-size: cover;
+    background-position: center;
+}
+
+h1 {
+    text-align: center;
+    color: #fffcfc;
+    font-weight: bold;
+    font-size: 60px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #fffcfc;
+}
+
+textarea {
+    display: block;
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #000000;
+}
+
+button {
+    background-color: blue;
+    color: #fffcfc;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+#inputText, #outputText {
+    width: 50%;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+button {
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    margin: 1%;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+.help-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+#helpButton {
+    background-color: rgb(199, 15, 2);
+    color: #fffcfc;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.contact-form {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.contact-form h2 {
+    text-align: center;
+    color: #333;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 1px;
+    color: #333;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 2px;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+}
+
+.contact-form button {
+    background-color: blue;
+    color: #fff;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+}
+
+footer {
+    margin-top: 250px;
+    text-align: center;
+    color: #fffcfc;
+}
+
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 768px) {
+    #inputText, #outputText {
+        width: 100%;
+    }
+
+    .contact-form {
+        width: 100%;
+    }
+}
