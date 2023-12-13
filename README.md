@@ -43,9 +43,7 @@ The Live Language Translation Web App is a simple and interactive tool that allo
 
 ## Screenshots
 
-![Screenshot 1](screenshots/screenshot1.png)
-
-![Screenshot 2](screenshots/screenshot2.png)
+![Screenshot](screenshots/images/Screenshoot.JPG)
 
 ## Contributing
 
