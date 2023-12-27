@@ -7,26 +7,14 @@ The Live Language Translation Web App is a simple and interactive tool that allo
 ## Features
 
 - **Text Translation:** Enter text in one language and get instant translations in another language.
-- **Speech-to-Text:** Press and hold the microphone button to record speech, which is then translated into text.
-- **AI Chatbot:** Receive a simple chatbot response based on the translated text.
 - **Contact Form:** A built-in contact form allows users to submit queries or feedback.
-
-## Technologies Used
-
-- HTML
-- CSS
-- JavaScript
-- Google Cloud Translation API
-- Google Cloud Speech-to-Text API
-- ResponsiveVoice API
-- Font Awesome Icons
 
 ## Getting Started
 
 1. **Clone the Repository:**
     ```bash
-    git clone https://github.com/your-username/live-language-translation.git
-    cd live-language-translation
+    git clone https://github.com/your-username/codeclause_live-language-translation.git
+    cd codeclause_live-language-translation
     ```
 
 2. **Open the Project:**
@@ -43,7 +31,7 @@ The Live Language Translation Web App is a simple and interactive tool that allo
 
 ## Screenshots
 
-![Screenshot](images/Screenshot.JPG)
+![Screenshot](#)
 
 ## Contributing
 
@@ -56,6 +44,4 @@ This project is licensed under the [MIT License](LICENSE).
 ## Acknowledgements
 
 - Font Awesome for providing icons.
-- Google Cloud Platform for Translation and Speech-to-Text APIs.
-- ResponsiveVoice for text-to-speech functionality.
 - Pexel for background image.

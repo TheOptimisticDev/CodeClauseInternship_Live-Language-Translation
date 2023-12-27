@@ -1,149 +1,122 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Load the Google Cloud Translation API client library
-    gapi.load('client', initTranslate);
+document.addEventListener("DOMContentLoaded", function () {
+    // Microsoft Translator API subscription key
+    const subscriptionKey = "YOUR_MICROSOFT_TRANSLATOR_API_KEY";
 
-    function initTranslate() {
-        // Initialize the Google Cloud Translation API client
-        gapi.client.init({
-            apiKey: 'TRANSLATE_API_KEY',
-            discoveryDocs: ['https://www.'],
-        });
-    }
+    // Microsoft Translator API endpoint
+    const endpoint = "https://api.cognitive.microsofttranslator.com/translate";
 
-    let mediaRecorder;
-    let recordedChunks = [];
+    // DOM elements
+    const inputLanguageSelector = document.getElementById("input-language");
+    const outputLanguageSelector = document.getElementById("output-language");
+    const inputText = document.getElementById("input-text");
+    const outputText = document.getElementById("output-text");
+    const swapButton = document.querySelector(".swap-position");
+    const inputCharsCount = document.getElementById("input-chars");
 
-    function startRecording() {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
+    // Event listeners
+    inputText.addEventListener("input", updateCharsCount);
+    swapButton.addEventListener("click", swapLanguages);
+    inputLanguageSelector.addEventListener("click", toggleLanguageSelector);
+    outputLanguageSelector.addEventListener("click", toggleLanguageSelector);
 
-                mediaRecorder.ondataavailable = event => {
-                    if (event.data.size > 0) {
-                        recordedChunks.push(event.data);
-                    }
-                };
+    // Fetch supported languages and populate selectors
+    fetchLanguages();
 
-                mediaRecorder.onstop = () => {
-                    const blob = new Blob(recordedChunks, { type: 'audio/wav' });
-                    const audioUrl = URL.createObjectURL(blob);
+    async function fetchLanguages() {
+        try {
+            // Fetch supported languages
+            const response = await axios.get(
+                "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0"
+            );
 
-                    // Clear the recorded chunks for the next recording
-                    recordedChunks = [];
+            // Extract language data
+            const languages = response.data.translation;
 
-                    // Translate the recorded text
-                    translateAudio(blob);
-                };
+            // Populate input language selector
+            populateSelector(inputLanguageSelector, languages);
 
-                mediaRecorder.start();
-            })
-            .catch(error => {
-                console.error('Error accessing microphone:', error);
-            });
-    }
-
-    function stopRecording() {
-        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-            mediaRecorder.stop();
+            // Populate output language selector
+            populateSelector(outputLanguageSelector, languages);
+        } catch (error) {
+            console.error("Error fetching languages:", error);
         }
     }
 
-    function translateAudio(audioBlob) {
-        const reader = new FileReader();
-        reader.onloadend = function () {
-            const base64Data = reader.result.split(',')[1];
-
-            // Use the Google Cloud Speech-to-Text API for language detection
-            const apiKey = 'GOOGLE_SPEECH_API_KEY';
-            const apiUrl = `https://speech.googleapis.com/v1/speech:recognize?key=${apiKey}`;
-
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    audio: {
-                        content: base64Data,
-                    },
-                    config: {
-                        encoding: 'LINEAR16',
-                        sampleRateHertz: 16000,
-                    },
-                }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const detectedLanguage = data.results[0].languageCode;
-
-                    // detectedLanguage for translation
-                    translateText(reader.result, detectedLanguage);
-                })
-                .catch(error => {
-                    console.error('Error detecting language:', error);
-                });
-        };
-
-        reader.readAsDataURL(audioBlob);
-    }
-
-    function translateText(textToTranslate, sourceLanguage) {
-        // Google Cloud Translation API for translation
-        gapi.client.translate.translations.list({
-            q: textToTranslate,
-            source: sourceLanguage,
-            target: 'es', // Change this to the target language code
-        }).then(response => {
-            const translatedText = response.result.translations[0].translatedText;
-
-            // Output the translated text
-            document.getElementById('outputText').value = translatedText;
-
-            // Read back the response using text-to-speech
-            chatbotResponse(translatedText);
-        }).catch(error => {
-            console.error('Error translating text:', error);
+    function populateSelector(selector, languages) {
+        const optionsContainer = selector.querySelector(".options-container");
+        Object.keys(languages).forEach(function (languageCode) {
+            const language = languages[languageCode];
+            const option = document.createElement("button");
+            option.classList.add("option");
+            option.textContent = language.name;
+            option.setAttribute("data-value", languageCode);
+            optionsContainer.appendChild(option);
         });
     }
 
-    function chatbotResponse(translatedText) {
-        // Simple chatbot
-        const botResponse = getBotResponse(translatedText);
+    async function translateText() {
+        const inputLanguage = inputLanguageSelector.querySelector(".selected").dataset.value;
+        const outputLanguage = outputLanguageSelector.querySelector(".selected").dataset.value;
+        const textToTranslate = inputText.value;
 
-        // Read back the response using text-to-speech
-        responsiveVoice.speak(botResponse, 'UK English Male', { rate: 0.8 });
+        try {
+            // Perform translation
+            const response = await axios.post(
+                endpoint,
+                [
+                    {
+                        text: textToTranslate,
+                    },
+                ],
+                {
+                    headers: {
+                        "Ocp-Apim-Subscription-Key": subscriptionKey,
+                        "Ocp-Apim-Subscription-Region": "your-region", // Replace with your Azure region
+                        "Content-type": "application/json",
+                    },
+                    params: {
+                        to: outputLanguage,
+                    },
+                }
+            );
+
+            // Update output text
+            const translatedText = response.data[0].translations[0].text;
+            outputText.value = translatedText;
+        } catch (error) {
+            console.error("Error translating text:", error);
+        }
     }
 
-    function getBotResponse(userInput) {
-        return `You said: ${userInput}. This is a simple chatbot response.`;
+    function updateCharsCount() {
+        inputCharsCount.textContent = inputText.value.length;
     }
 
-    function toggleContactForm() {
-        const contactForm = document.getElementById('contactForm');
-        contactForm.style.display = (contactForm.style.display === 'block') ? 'none' : 'block';
-    }    
+    function swapLanguages() {
+        const inputSelected = inputLanguageSelector.querySelector(".selected");
+        const outputSelected = outputLanguageSelector.querySelector(".selected");
 
-    // Event listener for the help button
-    document.getElementById('helpButton').addEventListener('click', toggleContactForm);
+        // Swap data-value attributes
+        const tempValue = inputSelected.dataset.value;
+        inputSelected.dataset.value = outputSelected.dataset.value;
+        outputSelected.dataset.value = tempValue;
 
-    // Event listener for the help form submission
-    document.getElementById('helpForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-    
-        // Collect form data
-        const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            message: document.getElementById('message').value,
-        };
-    
-        // Generate the mailto link
-        const mailtoLink = `mailto:mabunda.wealth@gmail.com?subject=${encodeURIComponent('Contact Form Submission')}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nMessage: ${formData.message}`)}`;
-    
-        // Open the user's default email client
-        window.location.href = mailtoLink;
-    
-        // Close the contact form after triggering the email client
-        document.getElementById('contactForm').style.display = 'none';
-    });    
+        // Swap display text
+        const tempText = inputSelected.textContent;
+        inputSelected.textContent = outputSelected.textContent;
+        outputSelected.textContent = tempText;
+
+        // Trigger translation with the updated languages
+        translateText();
+    }
+
+    function toggleLanguageSelector(event) {
+        const selector = event.currentTarget;
+        const optionsContainer = selector.querySelector(".options-container");
+
+        // Check if the optionsContainer exists before accessing its classList
+        if (optionsContainer) {
+            optionsContainer.classList.toggle("show-options");
+        }
+    }
 });
