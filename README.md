@@ -43,5 +43,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Acknowledgements
 
+- Google Translator for Ui inspiration.
 - Font Awesome for providing icons.
 - Pexel for background image.
